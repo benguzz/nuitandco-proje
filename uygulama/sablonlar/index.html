@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUIT&amp;CO. — Kişisel Cilt Bakımı Asistanı</title>
+<style>
+  :root{
+    --krem:#faf6f0;
+    --krem-koyu:#f1e9dd;
+    --kahve:#3d332a;
+    --kahve-acik:#6b5d4f;
+    --altin:#b08d57;
+    --altin-acik:#d8c3a0;
+    --beyaz:#ffffff;
+    --hata:#b3564a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:'Georgia', 'Times New Roman', serif;
+    background:var(--krem);
+    color:var(--kahve);
+    line-height:1.6;
+  }
+  .sans{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:24px 6%;
+    border-bottom:1px solid var(--krem-koyu);
+  }
+  .logo{font-size:1.6rem;letter-spacing:3px;font-weight:bold;color:var(--kahve);}
+  .logo span{color:var(--altin);}
+  nav a{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    color:var(--kahve-acik);text-decoration:none;font-size:.85rem;margin-left:24px;letter-spacing:1px;
+  }
+  .hero{
+    display:grid;grid-template-columns:1.1fr 1fr;gap:40px;
+    padding:60px 6%;align-items:start;
+  }
+  @media (max-width:900px){.hero{grid-template-columns:1fr;}}
+  .hero h1{
+    font-size:2.6rem;font-weight:normal;color:var(--kahve);
+    margin-bottom:18px;
+  }
+  .hero h1 em{font-style:italic;color:var(--altin);}
+  .hero p.lead{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    color:var(--kahve-acik);font-size:1.02rem;max-width:480px;margin-bottom:28px;
+  }
+  .rozet-satiri{display:flex;gap:28px;margin-top:24px;flex-wrap:wrap;}
+  .rozet{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  .rozet b{display:block;font-size:1.4rem;color:var(--altin);font-family:Georgia,serif;}
+  .rozet span{font-size:.78rem;color:var(--kahve-acik);}
+
+  /* Sohbet Kartı */
+  .sohbet-karti{
+    background:var(--beyaz);
+    border-radius:20px;
+    box-shadow:0 20px 50px rgba(107,93,79,.15);
+    overflow:hidden;
+    display:flex;flex-direction:column;
+    height:560px;
+    border:1px solid var(--krem-koyu);
+  }
+  .sohbet-baslik{
+    background:linear-gradient(135deg,var(--kahve) 0%,#544636 100%);
+    color:var(--krem);padding:18px 22px;
+    display:flex;align-items:center;gap:12px;
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  .sohbet-baslik .nokta{width:10px;height:10px;border-radius:50%;background:#7fbf8f;}
+  .sohbet-baslik strong{display:block;font-size:.95rem;}
+  .sohbet-baslik small{opacity:.75;font-size:.72rem;}
+  .sohbet-govde{
+    flex:1;overflow-y:auto;padding:20px;
+    display:flex;flex-direction:column;gap:14px;
+    background:var(--krem);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:.92rem;
+  }
+  .balon{max-width:85%;padding:12px 16px;border-radius:16px;white-space:pre-wrap;}
+  .balon.asistan{
+    background:var(--beyaz);align-self:flex-start;
+    border:1px solid var(--krem-koyu);border-bottom-left-radius:4px;
+  }
+  .balon.kullanici{
+    background:var(--kahve);color:var(--krem);align-self:flex-end;
+    border-bottom-right-radius:4px;
+  }
+  .yazior{align-self:flex-start;color:var(--kahve-acik);font-size:.82rem;font-style:italic;}
+  .sohbet-giris{
+    display:flex;gap:8px;padding:16px;border-top:1px solid var(--krem-koyu);background:var(--beyaz);
+  }
+  .sohbet-giris input{
+    flex:1;padding:12px 14px;border-radius:12px;border:1px solid var(--krem-koyu);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.9rem;outline:none;
+  }
+  .sohbet-giris input:focus{border-color:var(--altin);}
+  .sohbet-giris button{
+    background:var(--altin);color:var(--beyaz);border:none;border-radius:12px;
+    padding:0 20px;font-size:1.1rem;cursor:pointer;
+  }
+  .sohbet-giris button:hover{background:#96754a;}
+
+  /* Alt bölüm: form + neden biz */
+  .alt-bolum{
+    display:grid;grid-template-columns:1fr 1fr;gap:40px;
+    padding:20px 6% 70px;
+  }
+  @media (max-width:900px){.alt-bolum{grid-template-columns:1fr;}}
+  .kart{
+    background:var(--beyaz);border-radius:18px;padding:32px;
+    border:1px solid var(--krem-koyu);
+  }
+  .kart h2{font-weight:normal;font-size:1.4rem;margin-bottom:8px;}
+  .kart p.aciklama{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    color:var(--kahve-acik);font-size:.85rem;margin-bottom:20px;
+  }
+  form{display:flex;flex-direction:column;gap:12px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  label{font-size:.75rem;letter-spacing:.5px;color:var(--kahve-acik);text-transform:uppercase;}
+  input[type=text], input[type=tel], input[type=email], select, textarea{
+    width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--krem-koyu);
+    font-size:.9rem;font-family:inherit;outline:none;background:var(--krem);
+  }
+  input:focus, select:focus, textarea:focus{border-color:var(--altin);}
+  textarea{resize:vertical;min-height:70px;}
+  .gonder-btn{
+    margin-top:6px;background:var(--kahve);color:var(--krem);border:none;
+    padding:13px;border-radius:10px;font-size:.9rem;letter-spacing:.5px;cursor:pointer;
+  }
+  .gonder-btn:hover{background:#544636;}
+  .durum-mesaji{font-size:.82rem;margin-top:6px;}
+  .durum-mesaji.basarili{color:#3f7d55;}
+  .durum-mesaji.hatali{color:var(--hata);}
+
+  .neden-liste{display:flex;flex-direction:column;gap:18px;}
+  .neden-madde{display:flex;gap:14px;align-items:flex-start;}
+  .neden-ikon{
+    width:38px;height:38px;border-radius:50%;background:var(--krem-koyu);
+    display:flex;align-items:center;justify-content:center;color:var(--altin);flex-shrink:0;font-size:1.1rem;
+  }
+  .neden-madde h3{font-size:1rem;font-weight:normal;margin-bottom:2px;}
+  .neden-madde p{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    font-size:.83rem;color:var(--kahve-acik);
+  }
+  footer{
+    text-align:center;padding:24px;color:var(--kahve-acik);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:.78rem;
+    border-top:1px solid var(--krem-koyu);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">NUIT<span>&amp;CO.</span></div>
+  <nav class="sans">
+    <a href="#sohbet">Cilt Asistanı</a>
+    <a href="#danismanlik">Danışmanlık</a>
+    <a href="/panel">Yönetim Paneli</a>
+  </nav>
+</header>
+
+<section class="hero" id="sohbet">
+  <div>
+    <h1>Cildiniz için <em>doğru</em> rutini birlikte bulalım.</h1>
+    <p class="lead">
+      NUIT&amp;CO. Cilt Bakım Asistanı, elimizdeki ürünlerle size özel sabah ve akşam
+      rutini oluşturur. Cilt tipinizi ve dert ettiğiniz konuyu anlatmanız yeterli —
+      gerisini asistanımıza bırakın.
+    </p>
+    <div class="rozet-satiri">
+      <div class="rozet"><b>7/24</b><span>Anında Cilt Danışmanlığı</span></div>
+      <div class="rozet"><b>12+</b><span>NUIT&amp;CO. Ürünü</span></div>
+      <div class="rozet"><b>%100</b><span>Kişiye Özel Rutin</span></div>
+    </div>
+  </div>
+
+  <div class="sohbet-karti">
+    <div class="sohbet-baslik">
+      <div class="nokta"></div>
+      <div>
+        <strong>NUIT Asistan</strong>
+        <small>Çevrimiçi · Cilt Bakım Danışmanı</small>
+      </div>
+    </div>
+    <div class="sohbet-govde" id="sohbetGovde">
+      <div class="balon asistan">Merhaba, ben NUIT Asistan 🌿 Size en uygun cilt bakım rutinini oluşturmak için buradayım. Öncelikle cilt tipinizden bahseder misiniz? (Kuru, yağlı, karma, hassas veya normal)</div>
+    </div>
+    <form class="sohbet-giris" id="sohbetForm">
+      <input type="text" id="sohbetGiris" class="sans" placeholder="Örn: Cildim karma, burun bölgem yağlanıyor..." autocomplete="off" required>
+      <button type="submit">➤</button>
+    </form>
+  </div>
+</section>
+
+<section class="alt-bolum" id="danismanlik">
+  <div class="kart">
+    <h2>İletişim Bilgilerinizi Bırakın</h2>
+    <p class="aciklama">Size özel hazırlanan rutini kaydedelim ve NUIT&amp;CO. ekibi ücretsiz cilt bakım danışmanlığı için sizinle iletişime geçsin.</p>
+    <form id="adayForm">
+      <div>
+        <label>Ad Soyad</label>
+        <input type="text" name="isim" required>
+      </div>
+      <div>
+        <label>Telefon</label>
+        <input type="tel" name="telefon" placeholder="+90 5xx xxx xx xx">
+      </div>
+      <div>
+        <label>E-posta (opsiyonel)</label>
+        <input type="email" name="eposta">
+      </div>
+      <div>
+        <label>Cilt Tipiniz</label>
+        <select name="cilt_tipi">
+          <option value="">Seçiniz</option>
+          <option>Kuru</option>
+          <option>Yağlı</option>
+          <option>Karma</option>
+          <option>Hassas</option>
+          <option>Normal</option>
+        </select>
+      </div>
+      <div>
+        <label>Notunuz</label>
+        <textarea name="mesaj" placeholder="Hangi konuda destek istediğinizi yazabilirsiniz."></textarea>
+      </div>
+      <button type="submit" class="gonder-btn">Danışmanlık Talep Et →</button>
+      <div class="durum-mesaji" id="adayDurum"></div>
+    </form>
+  </div>
+
+  <div class="kart">
+    <h2>Neden NUIT&amp;CO.?</h2>
+    <p class="aciklama">Doğal içeriklerle formüle edilmiş ürünlerimizi yapay zeka destekli kişisel bakım deneyimiyle buluşturuyoruz.</p>
+    <div class="neden-liste">
+      <div class="neden-madde">
+        <div class="neden-ikon">✦</div>
+        <div><h3>Kişiye Özel Rutin</h3><p>Cilt tipinize ve derdinize göre sabah/akşam adım adım rutin önerisi.</p></div>
+      </div>
+      <div class="neden-madde">
+        <div class="neden-ikon">◎</div>
+        <div><h3>Gerçek Ürün Kataloğu</h3><p>Asistan yalnızca elimizdeki mevcut NUIT&amp;CO. ürünlerinden öneri sunar.</p></div>
+      </div>
+      <div class="neden-madde">
+        <div class="neden-ikon">✓</div>
+        <div><h3>Uzman Desteği</h3><p>İsterseniz bıraktığınız bilgilerle ekibimiz sizinle birebir ilgilenir.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>NUIT&amp;CO. — Kişisel Cilt Bakımı Asistanı · Yapay zeka önerileri tıbbi tavsiye yerine geçmez.</footer>
+
+<script>
+  const sohbetGovde = document.getElementById('sohbetGovde');
+  const sohbetForm = document.getElementById('sohbetForm');
+  const sohbetGiris = document.getElementById('sohbetGiris');
+  let gecmis = [];
+  let sonOnerilenRutin = '';
+
+  function balonEkle(metin, kimden){
+    const balon = document.createElement('div');
+    balon.className = 'balon ' + kimden;
+    balon.textContent = metin;
+    sohbetGovde.appendChild(balon);
+    sohbetGovde.scrollTop = sohbetGovde.scrollHeight;
+    return balon;
+  }
+
+  sohbetForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const mesaj = sohbetGiris.value.trim();
+    if(!mesaj) return;
+
+    balonEkle(mesaj, 'kullanici');
+    gecmis.push({rol:'user', icerik: mesaj});
+    sohbetGiris.value = '';
+
+    const yaziyorEl = document.createElement('div');
+    yaziyorEl.className = 'yazior';
+    yaziyorEl.textContent = 'NUIT Asistan yazıyor...';
+    sohbetGovde.appendChild(yaziyorEl);
+    sohbetGovde.scrollTop = sohbetGovde.scrollHeight;
+
+    try{
+      const yanit = await fetch('/api/sohbet', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({mesaj: mesaj, gecmis: gecmis})
+      });
+      const veri = await yanit.json();
+      yaziyorEl.remove();
+
+      if(veri.basari){
+        balonEkle(veri.cevap, 'asistan');
+        gecmis.push({rol:'assistant', icerik: veri.cevap});
+        sonOnerilenRutin = veri.cevap;
+      } else {
+        balonEkle('Üzgünüm, şu anda yanıt veremiyorum: ' + (veri.hata || ''), 'asistan');
+      }
+    } catch(err){
+      yaziyorEl.remove();
+      balonEkle('Bağlantı hatası oluştu, lütfen tekrar deneyin.', 'asistan');
+    }
+  });
+
+  const adayForm = document.getElementById('adayForm');
+  const adayDurum = document.getElementById('adayDurum');
+
+  adayForm.addEventListener('submit', async function(e){
+    e.preventDefault();
+    const veriler = Object.fromEntries(new FormData(adayForm).entries());
+    veriler.onerilen_rutin = sonOnerilenRutin;
+
+    adayDurum.textContent = 'Gönderiliyor...';
+    adayDurum.className = 'durum-mesaji';
+
+    try{
+      const yanit = await fetch('/api/adaylar', {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(veriler)
+      });
+      const sonuc = await yanit.json();
+      if(sonuc.basari){
+        adayDurum.textContent = sonuc.mesaj || 'Kaydınız alındı, teşekkürler!';
+        adayDurum.className = 'durum-mesaji basarili';
+        adayForm.reset();
+      } else {
+        adayDurum.textContent = sonuc.hata || 'Bir hata oluştu.';
+        adayDurum.className = 'durum-mesaji hatali';
+      }
+    } catch(err){
+      adayDurum.textContent = 'Bağlantı hatası oluştu, lütfen tekrar deneyin.';
+      adayDurum.className = 'durum-mesaji hatali';
+    }
+  });
+</script>
+
+</body>
+</html>

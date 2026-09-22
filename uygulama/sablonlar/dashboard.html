@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NUIT&amp;CO. — Yönetim Paneli</title>
+<style>
+  :root{
+    --krem:#faf6f0; --krem-koyu:#f1e9dd; --kahve:#3d332a; --kahve-acik:#6b5d4f;
+    --altin:#b08d57; --beyaz:#ffffff;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+    background:var(--krem);color:var(--kahve);
+  }
+  .duzen{display:grid;grid-template-columns:220px 1fr;min-height:100vh;}
+  aside{background:var(--kahve);color:var(--krem);padding:26px 18px;}
+  aside .logo{font-size:1.2rem;letter-spacing:2px;font-weight:bold;margin-bottom:30px;}
+  aside .logo span{color:var(--altin);}
+  aside a{
+    display:block;color:var(--krem);text-decoration:none;padding:10px 12px;
+    border-radius:8px;font-size:.85rem;margin-bottom:6px;opacity:.85;
+  }
+  aside a.aktif, aside a:hover{background:rgba(255,255,255,.08);opacity:1;}
+  main{padding:30px 36px;}
+  header.ust{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
+  header.ust h1{font-size:1.3rem;font-weight:600;}
+  .arama{
+    padding:9px 14px;border-radius:10px;border:1px solid var(--krem-koyu);
+    font-size:.85rem;width:240px;background:var(--beyaz);
+  }
+  .kart-satiri{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+  @media (max-width:900px){.kart-satiri{grid-template-columns:repeat(2,1fr);}}
+  .ozet-kart{
+    background:var(--beyaz);border-radius:14px;padding:18px 20px;border:1px solid var(--krem-koyu);
+  }
+  .ozet-kart .etiket{font-size:.72rem;color:var(--kahve-acik);text-transform:uppercase;letter-spacing:.5px;}
+  .ozet-kart .deger{font-size:1.7rem;font-weight:700;color:var(--altin);margin-top:4px;}
+  .panel{
+    background:var(--beyaz);border-radius:14px;border:1px solid var(--krem-koyu);
+    overflow:hidden;margin-bottom:28px;
+  }
+  .panel-baslik{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:16px 20px;border-bottom:1px solid var(--krem-koyu);
+  }
+  .panel-baslik h2{font-size:1rem;font-weight:600;}
+  .buton{
+    background:var(--kahve);color:var(--krem);border:none;padding:8px 14px;
+    border-radius:8px;font-size:.78rem;cursor:pointer;
+  }
+  .buton:hover{background:#544636;}
+  table{width:100%;border-collapse:collapse;font-size:.85rem;}
+  th{
+    text-align:left;padding:12px 20px;background:var(--krem);
+    color:var(--kahve-acik);font-size:.72rem;text-transform:uppercase;letter-spacing:.4px;
+  }
+  td{padding:12px 20px;border-top:1px solid var(--krem-koyu);vertical-align:top;}
+  tr:hover td{background:#fdfbf8;}
+  .bos-durum{padding:40px;text-align:center;color:var(--kahve-acik);font-size:.9rem;}
+  .etiket-pill{
+    display:inline-block;background:var(--krem-koyu);color:var(--kahve);
+    padding:3px 10px;border-radius:100px;font-size:.72rem;
+  }
+  .mesaj-kisa{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+</style>
+</head>
+<body>
+
+<div class="duzen">
+  <aside>
+    <div class="logo">NUIT<span>&amp;CO.</span></div>
+    <a href="#adaylar" class="aktif">Müşteri Adayları</a>
+    <a href="#urunler">Ürün Kataloğu</a>
+    <a href="/">← Karşılama Sayfası</a>
+  </aside>
+
+  <main>
+    <header class="ust">
+      <h1>Cilt Bakımı Danışmanlık Paneli</h1>
+      <input type="text" class="arama" id="aramaKutu" placeholder="İsim veya telefon ara...">
+    </header>
+
+    <div class="kart-satiri">
+      <div class="ozet-kart"><div class="etiket">Toplam Aday</div><div class="deger" id="ozetToplam">0</div></div>
+      <div class="ozet-kart"><div class="etiket">Bu Ay Gelen</div><div class="deger" id="ozetBuAy">0</div></div>
+      <div class="ozet-kart"><div class="etiket">Bugün Gelen</div><div class="deger" id="ozetBugun">0</div></div>
+      <div class="ozet-kart"><div class="etiket">Katalogdaki Ürün</div><div class="deger" id="ozetUrun">0</div></div>
+    </div>
+
+    <div class="panel" id="adaylar">
+      <div class="panel-baslik">
+        <h2>Müşteri Adayları (Leadler)</h2>
+        <button class="buton" id="csvIndir">CSV İndir</button>
+      </div>
+      <div id="adayTabloAlani">
+        <div class="bos-durum">Yükleniyor...</div>
+      </div>
+    </div>
+
+    <div class="panel" id="urunler">
+      <div class="panel-baslik"><h2>Ürün Kataloğu</h2></div>
+      <div id="urunTabloAlani">
+        <div class="bos-durum">Yükleniyor...</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  let tumAdaylar = [];
+
+  function tarihFormatla(t){
+    if(!t) return '-';
+    return t;
+  }
+
+  function adayTablosunuCiz(adaylar){
+    const alan = document.getElementById('adayTabloAlani');
+    if(adaylar.length === 0){
+      alan.innerHTML = '<div class="bos-durum">Henüz kayıtlı lead bulunmuyor.</div>';
+      return;
+    }
+    let html = '<table><thead><tr><th>Ad Soyad</th><th>İletişim</th><th>Cilt Tipi</th><th>Not</th><th>Tarih</th></tr></thead><tbody>';
+    adaylar.forEach(a => {
+      html += `<tr>
+        <td>${a.isim || '-'}</td>
+        <td>${a.telefon || a.eposta || '-'}</td>
+        <td>${a.cilt_tipi ? '<span class="etiket-pill">'+a.cilt_tipi+'</span>' : '-'}</td>
+        <td class="mesaj-kisa" title="${(a.mesaj||'').replace(/"/g,'&quot;')}">${a.mesaj || '-'}</td>
+        <td>${tarihFormatla(a.olusturulma_tarihi)}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    alan.innerHTML = html;
+  }
+
+  function urunTablosunuCiz(urunler){
+    const alan = document.getElementById('urunTabloAlani');
+    if(urunler.length === 0){
+      alan.innerHTML = '<div class="bos-durum">Henüz ürün eklenmemiş.</div>';
+      return;
+    }
+    let html = '<table><thead><tr><th>Ürün</th><th>Kategori</th><th>Cilt Tipi</th><th>Hedef Sorun</th><th>Fiyat</th><th>Stok</th></tr></thead><tbody>';
+    urunler.forEach(u => {
+      html += `<tr>
+        <td>${u.isim}</td>
+        <td>${u.kategori}</td>
+        <td>${u.cilt_tipi}</td>
+        <td>${u.sorun_alani || '-'}</td>
+        <td>${u.fiyat ? u.fiyat + ' TL' : '-'}</td>
+        <td>${u.stokta ? '<span class="etiket-pill">Stokta</span>' : 'Tükendi'}</td>
+      </tr>`;
+    });
+    html += '</tbody></table>';
+    alan.innerHTML = html;
+  }
+
+  function ozetleriGuncelle(adaylar, urunSayisi){
+    document.getElementById('ozetToplam').textContent = adaylar.length;
+    document.getElementById('ozetUrun').textContent = urunSayisi;
+
+    const bugun = new Date().toISOString().slice(0,10);
+    const buAy = new Date().toISOString().slice(0,7);
+    let bugunSayisi = 0, buAySayisi = 0;
+    adaylar.forEach(a => {
+      if(a.olusturulma_tarihi){
+        if(a.olusturulma_tarihi.startsWith(bugun)) bugunSayisi++;
+        if(a.olusturulma_tarihi.startsWith(buAy)) buAySayisi++;
+      }
+    });
+    document.getElementById('ozetBugun').textContent = bugunSayisi;
+    document.getElementById('ozetBuAy').textContent = buAySayisi;
+  }
+
+  async function verileriYukle(){
+    try{
+      const [adayYanit, urunYanit] = await Promise.all([
+        fetch('/api/adaylar'),
+        fetch('/api/urunler')
+      ]);
+      const adayVeri = await adayYanit.json();
+      const urunVeri = await urunYanit.json();
+
+      tumAdaylar = adayVeri.adaylar || [];
+      adayTablosunuCiz(tumAdaylar);
+      urunTablosunuCiz(urunVeri.urunler || []);
+      ozetleriGuncelle(tumAdaylar, (urunVeri.urunler || []).length);
+    } catch(err){
+      document.getElementById('adayTabloAlani').innerHTML = '<div class="bos-durum">Veriler yüklenemedi.</div>';
+    }
+  }
+
+  document.getElementById('aramaKutu').addEventListener('input', function(e){
+    const sorgu = e.target.value.toLowerCase();
+    const filtreli = tumAdaylar.filter(a =>
+      (a.isim||'').toLowerCase().includes(sorgu) ||
+      (a.telefon||'').toLowerCase().includes(sorgu) ||
+      (a.eposta||'').toLowerCase().includes(sorgu)
+    );
+    adayTablosunuCiz(filtreli);
+  });
+
+  document.getElementById('csvIndir').addEventListener('click', function(){
+    if(tumAdaylar.length === 0) return;
+    const basliklar = ['isim','telefon','eposta','cilt_tipi','mesaj','olusturulma_tarihi'];
+    let csv = basliklar.join(',') + '\n';
+    tumAdaylar.forEach(a => {
+      csv += basliklar.map(b => '"' + String(a[b] || '').replace(/"/g,'""') + '"').join(',') + '\n';
+    });
+    const blob = new Blob([csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'nuitco_musteri_adaylari.csv';
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  verileriYukle();
+</script>
+
+</body>
+</html>
