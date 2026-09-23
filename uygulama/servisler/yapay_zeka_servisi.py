@@ -75,7 +75,7 @@ class YapayZekaServisi:
     # -------------------------------------------------------------
     def _groq_cagir(self, kullanici_mesaji, sohbet_gecmisi, urun_katalogu):
         istemci = Groq(api_key=current_app.config.get('GROQ_API_KEY'))
-        model = current_app.config.get('GROQ_MODEL', 'llama-3.3-70b-versatile')
+        model = current_app.config.get('GROQ_MODEL', 'penai/gpt-oss-120b')
 
         mesajlar = [{"role": "system", "content": self._sistem_talimati_olustur(urun_katalogu)}]
 
