@@ -20,7 +20,7 @@ class Ayarlar:
     # --- Yapay Zeka Bağlantısı (Groq) ---
     AI_PROVIDER = os.environ.get('AI_PROVIDER', 'groq')
     GROQ_API_KEY = os.environ.get('GROQ_API_KEY', '')
-    GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.3-70b-versatile')
+    GROQ_MODEL = os.environ.get('GROQ_MODEL', 'openai/gpt-oss-120b')
 
     CORS_ALLOWED_ORIGINS = os.environ.get('CORS_ALLOWED_ORIGINS', '*')
 
