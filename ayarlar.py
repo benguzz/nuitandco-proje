@@ -9,6 +9,11 @@ kaybolmadan buradan ayarlarsınız.
 
 import os
 from dotenv import load_dotenv
+from flask import Flask
+from flask_cors import CORS # Bunu en üste ekle
+
+app = Flask(__name__)
+CORS(app, resources={r"/api/*": {"origins": "*"}}) # Bunu app = Flask() satırının hemen altına ekle
 
 load_dotenv()  # .env dosyasındaki gizli ayarları oku
 
