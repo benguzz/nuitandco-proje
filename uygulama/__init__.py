@@ -13,6 +13,8 @@ from flask_cors import CORS
 
 from ayarlar import ayar_secici
 
+app = Flask(__name__)
+CORS(app)
 
 def uygulama_olustur(ayar_adi=None):
     uygulama = Flask(__name__, template_folder='sablonlar', static_folder='sablonlar')
