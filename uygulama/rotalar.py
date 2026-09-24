@@ -26,6 +26,10 @@ from uygulama.database import (
     tum_urunleri_getir,
 )
 from uygulama.servisler.yapay_zeka_servisi import yapay_zeka_servisi, YapayZekaServisHatasi
+from flask_cors import CORS  # <-- Bğunu ekle
+
+app = Flask(__name__)
+CORS(app)
 
 api_arayuzu = Blueprint('api_arayuzu', __name__)
 sayfa_arayuzu = Blueprint('sayfa_arayuzu', __name__)
